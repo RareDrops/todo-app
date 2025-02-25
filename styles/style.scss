@@ -1,0 +1,131 @@
+* {
+	box-sizing: border-box;
+}
+
+html {
+	overflow-y: hidden;
+	scroll-behavior: smooth;
+}
+
+:root {
+	--primary-font: "Tsukimi Rounded", serif;
+	--primary-color: #F5F3ED;
+	--yellow-button-color: #FFF18B;
+	--task-list-grey-color: #D9D9D9;
+
+}
+
+body {
+	font-family: var(--primary-font);
+	margin: 0;
+}
+
+section {
+	display: flex;
+	justify-content: center;
+}
+
+ul {
+	li {
+		list-style-type: none;
+	}
+}
+
+
+.frame {
+	margin-top: 5%;
+	display: flex;
+	background-color: var(--primary-color);
+	align-items: center;
+	width: 30%;
+	flex-direction: column;
+	border: 3px solid black;
+	border-radius: 15px;
+	min-height: 100vh;
+
+	&__header {
+		align-self: flex-start; // Align the item at the left side of the cross axis instead of the specified center in #frame
+		padding-left: 5%;
+	}
+
+	&__task-input {
+		align-self: flex-start;
+		padding-left: 5%;
+		width: 100%;
+
+		&-field {
+			font-family: var(--primary-font);
+			width: 70%;
+			height: 3.5rem;
+			border-radius: 5px;
+			border: 1px;
+			padding-left: 5px;
+			font-size: 1.5rem;
+		}
+
+		&-button {
+			width: 20%;
+			height: 3.5rem;
+			font-size: 1.5rem;
+			font-family: var(--primary-font);
+			border: none;
+			background-color: var(--yellow-button-color);
+			border-radius: 15%;
+			cursor: pointer;
+		}
+	}
+
+
+	&__task-list-header {
+		margin-top: 5%;
+	}
+
+	&__task-list {
+		width: 85%;
+	}
+
+	&__task-list-item {
+		display: flex;
+		align-items: center;
+		width: 100%;
+		height: 3rem;
+		margin-top: 5%;
+		padding-left: 5%;
+		padding-right: 5%;
+		background-color: var(--task-list-grey-color);
+		border-radius: 5px;
+
+
+		&:first-child {
+			margin-top: 0%;
+		}
+	}
+}
+
+
+
+
+// Define a map for the predefined properties
+$text-spans: (
+  "text-span-1": (font-size: 1.5rem, line-height: 4.5rem, font-weight: 600),
+);
+
+.font-weight-normal {
+	font-weight: 500 !important;
+}
+
+.font-weight-bold {
+	font-weight: 600 !important;
+}
+
+// Loop through the map and generate classes
+@each $class, $properties in $text-spans {
+	.#{$class} {
+	  	@each $property, $value in $properties {
+			#{$property}: $value;
+	  	}
+	}
+}
+
+
+@import 'checkmark-block';

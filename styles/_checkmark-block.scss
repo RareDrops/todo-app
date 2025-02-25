@@ -1,0 +1,30 @@
+.checkmark-checkbox {
+    display: none; // Hide the default checkbox
+}
+
+.checkmark-label {
+    display: inline-flex; // makes the label an inline flex container, allowing easy alignment of its children.
+    justify-content: center; // centers the checkmark icon horizontally
+    align-items: center; // centers the checkmark icon vertically
+    width: 25px; // width size of the checkbox
+    height: 25px; // height size of the checkbox
+    background-color: #fff;
+    border: none;
+    border-radius: 10%;
+    cursor: pointer;
+    font-size: 1.5rem;
+    color: white;
+    margin-right: 10px;
+}
+
+.checkmark-checkbox:checked + .checkmark-label {
+    background-color: green; // Change color when checked
+}
+
+.checkmark-label i {
+    display: none; // Hide the checkmark icon by default
+}
+
+.checkmark-checkbox:checked + .checkmark-label i {
+    display: inline; // Show the checkmark icon when checked
+}

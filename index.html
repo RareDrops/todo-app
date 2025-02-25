@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<link rel="stylesheet" href="styles/style.css">
+	<link rel="preconnect" href="https://fonts.googleapis.com">
+	<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+	<link href="https://fonts.googleapis.com/css2?family=Tsukimi+Rounded&display=swap" rel="stylesheet">
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+	<title>To Do App</title>
+</head>
+<body>
+	<section>
+		<div class = "frame">
+			<div class = "frame__header text-span-1">
+				To Do List
+			</div>
+
+			<div class = "frame__task-input">
+				<input type="text" id="task-input" class="frame__task-input-field">
+				<button id="add-task" class="frame__task-input-button">Add</button>
+			</div>
+			
+			<div class = "frame__task-list-header text-span-1 font-weight-normal">
+				Task List
+			</div>
+			<div id="taskList" class="frame__task-list">
+				<div class = "frame__task-list-item">
+					<input type="checkbox" id="task-1" class="checkmark-checkbox">
+					<label for="task-1" class="checkmark-label"><i class="fas fa-check"></i></label>
+					<span>Task 1: Do this, Do that blabla</span>
+				</div>
+				<div class = "frame__task-list-item">
+					<input type="checkbox" id="task-2" class="checkmark-checkbox">
+					<label for="task-2" class="checkmark-label"><i class="fas fa-check"></i></label>
+					<span>Task 1: Do this, Do that blabla</span>
+				</div>
+			<div>
+		</div>
+	</section>
+
+	<script src="script.js"></script>
+</body>
+</html>
