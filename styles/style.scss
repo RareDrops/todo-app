@@ -23,6 +23,7 @@ body {
 section {
 	display: flex;
 	justify-content: center;
+	height: 100vh;
 }
 
 ul {
@@ -38,10 +39,10 @@ ul {
 	background-color: var(--primary-color);
 	align-items: center;
 	width: 30%;
+	height: 70%;
 	flex-direction: column;
 	border: 3px solid black;
 	border-radius: 15px;
-	min-height: 100vh;
 
 	&__header {
 		align-self: flex-start; // Align the item at the left side of the cross axis instead of the specified center in #frame
@@ -94,7 +95,6 @@ ul {
 		padding-right: 5%;
 		background-color: var(--task-list-grey-color);
 		border-radius: 5px;
-
 
 		&:first-child {
 			margin-top: 0%;
