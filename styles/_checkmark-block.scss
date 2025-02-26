@@ -3,6 +3,7 @@
 }
 
 .checkmark-label {
+    user-select: none;
     display: inline-flex; // makes the label an inline flex container, allowing easy alignment of its children.
     justify-content: center; // centers the checkmark icon horizontally
     align-items: center; // centers the checkmark icon vertically
