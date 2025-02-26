@@ -3,7 +3,6 @@
 }
 
 html {
-	overflow-y: hidden;
 	scroll-behavior: smooth;
 }
 
@@ -23,6 +22,7 @@ body {
 section {
 	display: flex;
 	justify-content: center;
+	align-items: flex-start;
 	height: 100vh;
 }
 
@@ -39,7 +39,8 @@ ul {
 	background-color: var(--primary-color);
 	align-items: center;
 	width: 30%;
-	height: 70%;
+	height: auto;
+	min-height: 70%;
 	flex-direction: column;
 	border: 3px solid black;
 	border-radius: 15px;
@@ -89,15 +90,22 @@ ul {
 		display: flex;
 		align-items: center;
 		width: 100%;
-		height: 3rem;
+		height: auto;
+		min-height: 3rem;
 		margin-top: 5%;
 		padding-left: 5%;
 		padding-right: 5%;
+		padding-top: 2px;
+		padding-bottom: 2px;
 		background-color: var(--task-list-grey-color);
 		border-radius: 5px;
 
 		&:first-child {
 			margin-top: 0%;
+		}
+
+		&:last-child {
+			margin-bottom: 5%;
 		}
 	}
 }
