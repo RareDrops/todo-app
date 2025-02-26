@@ -7,8 +7,8 @@
     display: inline-flex; // makes the label an inline flex container, allowing easy alignment of its children.
     justify-content: center; // centers the checkmark icon horizontally
     align-items: center; // centers the checkmark icon vertically
-    width: 25px; // width size of the checkbox
-    height: 25px; // height size of the checkbox
+    min-width: 25px; // width size of the checkbox
+    min-height: 25px; // height size of the checkbox
     background-color: #fff;
     border: none;
     border-radius: 10%;
