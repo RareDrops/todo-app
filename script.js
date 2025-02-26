@@ -14,8 +14,20 @@
 class Task {
 	constructor() {
 		this.tasklist = document.getElementById("taskList");
-		this.numberOfTasks = 0;
+		this.taskArray = localStorage.getItem('items') ? JSON.parse(localStorage.getItem('items')) : [];
+		this.numberOfTasks = this.taskArray.length;
+		this.initializeTaskList();
+	}
 
+	initializeTaskList() {
+		for (let i = 0; i < this.taskArray.length; i++) {
+			this.displayTask(this.taskArray[i])
+		}	
+	}
+
+	addItemToArray(content) {
+		this.taskArray.push(content);
+		localStorage.setItem('items', JSON.stringify(this.taskArray));
 	}
 
 	getNumberOftasks() {
@@ -26,8 +38,13 @@ class Task {
 		this.numberOfTasks += 1;
 	}
 
-	// get the "content" to be added along with the task
 	addTask(content) {
+		this.addItemToArray(content);
+		this.displayTask(content)
+	}
+
+	// get the "content" to be added along with the task
+	displayTask(content) {
 		const currentTaskNumber = `task-${this.numberOfTasks + 1}`
 
 		const task = document.createElement("div");
@@ -51,13 +68,14 @@ class Task {
 		task.appendChild(checkBox);
 		task.appendChild(label).appendChild(checkMarkImage);
 		task.appendChild(taskDescription);
-
 		this.tasklist.appendChild(task);
-		this.updateNumberOftasks(); // finally, increment the number of tasks
+
+		this.updateNumberOftasks();
 	}
 
 	// IMPLEMENT THIS
 	completeTask() {
+
 	}
 }
 
