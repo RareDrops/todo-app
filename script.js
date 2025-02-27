@@ -1,9 +1,6 @@
 
 
 // Create a class that has these functionalities:
-// 1. Getting or retrieving the number of tasks from localStorage
-// 2. Creating another task object and appending it to the task list
-// 3. Updating the number of tasks in the localStorage, and also storing the task object or content in the localStorage
 // 4. Once the task has been completed, we move the completed task(check marked) to completed task list in localStorage
 // 5. If we want to undo(uncheck) the task that has been completed, we move the completed task from complete task list to task list
 // 6. If we want to delete a task from the completed/uncomplete task list, we can delete it from localStorage
@@ -14,20 +11,20 @@
 class Task {
 	constructor() {
 		this.tasklist = document.getElementById("taskList");
-		this.taskArray = localStorage.getItem('items') ? JSON.parse(localStorage.getItem('items')) : [];
-		this.numberOfTasks = this.taskArray.length;
+		// Stores the key:value pair for the tasks
+		this.taskDictionary = localStorage.getItem('task-items') ? JSON.parse(localStorage.getItem('task-items')) : {};
+		// Object.keys will return the array/list of all keys then count the array using length property
+		this.taskDictionaryKeysArray = Object.keys(this.taskDictionary);
+		this.numberOfTasks = this.taskDictionaryKeysArray.length;
 		this.initializeTaskList();
 	}
 
 	initializeTaskList() {
-		for (let i = 0; i < this.taskArray.length; i++) {
-			this.displayTask(this.taskArray[i])
+		for (let i = 0; i < this.numberOfTasks; i++) {
+			let taskId = this.taskDictionaryKeysArray[i]
+			let taskContent = this.taskDictionary[taskId]
+			this.displayTask(taskId, taskContent)
 		}	
-	}
-
-	addItemToArray(content) {
-		this.taskArray.push(content);
-		localStorage.setItem('items', JSON.stringify(this.taskArray));
 	}
 
 	getNumberOftasks() {
@@ -39,25 +36,32 @@ class Task {
 	}
 
 	addTask(content) {
-		this.addItemToArray(content);
-		this.displayTask(content)
+		let keyId = `task-${this.numberOfTasks+1}`
+		this.addItemToDictionary(keyId, content);
+		this.displayTask(keyId, content)
+		this.updateNumberOftasks();
+	}
+
+	addItemToDictionary(keyId, content) {
+		this.taskDictionary[keyId] = content
+		localStorage.setItem('task-items', JSON.stringify(this.taskDictionary));
 	}
 
 	// get the "content" to be added along with the task
-	displayTask(content) {
-		const currentTaskNumber = `task-${this.numberOfTasks + 1}`
+	displayTask(taskId, content) {
+		let currentTaskId = taskId
 
 		const task = document.createElement("div");
 		task.classList.add("frame__task-list-item");
 
 		const checkBox = document.createElement("input");
 		checkBox.type = "checkbox";
-		checkBox.id = currentTaskNumber;
+		checkBox.id = currentTaskId;
 		checkBox.classList.add("checkmark-checkbox");
 
-		const label = document.createElement("label");
-		label.htmlFor = currentTaskNumber;
-		label.classList.add("checkmark-label");
+		const checkmarkLabel = document.createElement("label");
+		checkmarkLabel.htmlFor = currentTaskId;
+		checkmarkLabel.classList.add("checkmark-label");
 
 		const checkMarkImage = document.createElement("i");
 		checkMarkImage.classList.add("fas", "fa-check")
@@ -66,20 +70,24 @@ class Task {
 		taskDescription.textContent = content;
 
 		task.appendChild(checkBox);
-		task.appendChild(label).appendChild(checkMarkImage);
+		task.appendChild(checkmarkLabel).appendChild(checkMarkImage);
 		task.appendChild(taskDescription);
 		this.tasklist.appendChild(task);
-
-		this.updateNumberOftasks();
 	}
 
 	// IMPLEMENT THIS
-	completeTask() {
-
+	completeTask(targetElementId) {
+		// Gets the parent node (div that contains the checkbox) then remove it from the page and update localStorage
+		const  parentNode = document.getElementById(targetElementId).parentElement
+		console.log(targetElementId)
+		delete this.taskDictionary[targetElementId];
+		console.log(this.taskDictionary);
+		localStorage.setItem("task-items", JSON.stringify(this.taskDictionary))
+		parentNode.remove();
 	}
 }
 
-taskInstance = new Task();
+const taskInstance = new Task();
 
 const addTaskButton = document.getElementById("add-task-btn");
 var contentField = document.getElementById("task-text-input");
@@ -88,8 +96,14 @@ addTaskButton.addEventListener("click", function() {
 	taskInstance.addTask(contentField.value);
 });
 
-// const checkmarkLabels = document.getElementsByClassName("checkmark-checkbox");
-// checkmarkLabels.addEventListener("toggle")
+const checkmarkLabels = document.getElementsByClassName("checkmark-checkbox");
+document.addEventListener("change", function(event) {
+	// Adds event listener for Checkboxes
+	if (event.target && event.target.classList.contains("checkmark-checkbox")) {
+		const targetElementId = event.target.id
+		taskInstance.completeTask(targetElementId);
+	}
+});
 
 
 
