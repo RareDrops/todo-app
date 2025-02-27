@@ -36,7 +36,7 @@ ul li {
   align-items: center;
   width: 30%;
   height: auto;
-  min-height: 70%;
+  min-height: 80%;
   flex-direction: column;
   border: 3px solid black;
   border-radius: 15px;
@@ -49,6 +49,9 @@ ul li {
   align-self: flex-start;
   padding-left: 5%;
   width: 100%;
+  -webkit-user-select: none;
+     -moz-user-select: none;
+          user-select: none;
 }
 .frame__task-input-field {
   font-family: var(--primary-font);
@@ -60,6 +63,9 @@ ul li {
   font-size: 1.5rem;
 }
 .frame__task-input-button {
+  -webkit-user-select: text;
+     -moz-user-select: text;
+          user-select: text;
   width: 20%;
   height: 3.5rem;
   font-size: 1.5rem;
