@@ -87,13 +87,25 @@ class Task {
 	}
 }
 
+// Initializing the Task class
 const taskInstance = new Task();
 
-const addTaskButton = document.getElementById("add-task-btn");
-var contentField = document.getElementById("task-text-input");
 
+// add task button event listener
+const addTaskButton = document.getElementById("add-task-btn");
+var inputField = document.getElementById("task-text-input");
 addTaskButton.addEventListener("click", function() {
 	taskInstance.addTask(contentField.value);
+	inputField.value = "";
+});
+
+// Input Field "Enter" listener
+var inputField = document.getElementById("task-text-input");
+inputField.addEventListener("keydown", function(event) {
+	if (event.key == "Enter") {
+		taskInstance.addTask(inputField.value);
+		inputField.value = "";
+	}
 });
 
 const checkmarkLabels = document.getElementsByClassName("checkmark-checkbox");
