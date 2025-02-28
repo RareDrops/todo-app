@@ -11,6 +11,7 @@ html {
   --primary-color: #F5F3ED;
   --yellow-button-color: #FFF18B;
   --task-list-grey-color: #D9D9D9;
+  --light-grey-color-1: #9c9c9c;
 }
 
 body {
@@ -34,7 +35,7 @@ ul li {
   display: flex;
   background-color: var(--primary-color);
   align-items: center;
-  width: 30%;
+  width: 570px;
   height: auto;
   min-height: 80%;
   flex-direction: column;
@@ -55,7 +56,7 @@ ul li {
 }
 .frame__task-input-field {
   font-family: var(--primary-font);
-  width: 70%;
+  width: 74%;
   height: 3.5rem;
   border-radius: 5px;
   border: 1px;
@@ -79,7 +80,7 @@ ul li {
   margin-top: 5%;
 }
 .frame__task-list {
-  width: 85%;
+  width: 90%;
 }
 .frame__task-list-item {
   display: flex;
@@ -102,6 +103,10 @@ ul li {
   margin-bottom: 5%;
 }
 
+.flex-end {
+  justify-self: end;
+}
+
 .font-weight-normal {
   font-weight: 500 !important;
 }
@@ -114,6 +119,11 @@ ul li {
   font-size: 1.5rem;
   line-height: 4.5rem;
   font-weight: 600;
+}
+
+.text-span-2 {
+  font-size: 0.9rem;
+  color: var(--light-grey-color-1);
 }
 
 .checkmark-checkbox {
@@ -148,4 +158,16 @@ ul li {
 
 .checkmark-checkbox:checked + .checkmark-label i {
   display: inline;
+}
+
+.completed-task-button {
+  align-items: flex-end;
+  font-family: var(--primary-font);
+  background-color: var(--primary-color);
+  border: none;
+  border-radius: 15%;
+  cursor: pointer;
+}
+.completed-task-button:hover {
+  color: black;
 }/*# sourceMappingURL=style.css.map */
