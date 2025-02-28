@@ -107,6 +107,10 @@ ul li {
   justify-self: end;
 }
 
+.hidden {
+  display: none !important;
+}
+
 .font-weight-normal {
   font-weight: 500 !important;
 }

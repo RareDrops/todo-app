@@ -10,13 +10,20 @@
 
 class Task {
 	constructor() {
-		this.tasklist = document.getElementById("taskList");
-		// Stores the key:value pair for the tasks
+		this.taskList = document.getElementById("task-list");
 		this.taskDictionary = localStorage.getItem('task-items') ? JSON.parse(localStorage.getItem('task-items')) : {};
-		// Object.keys will return the array/list of all keys then count the array using length property
 		this.taskDictionaryKeysArray = Object.keys(this.taskDictionary);
 		this.numberOfTasks = this.taskDictionaryKeysArray.length;
+
+		this.completedTaskList = document.getElementById("completed-task-list");
+		this.completedTaskDictionary = localStorage.getItem('completed-task-items') ? JSON.parse(localStorage.getItem('completed-task-items')) : {};
+		this.completedTaskDictionaryKeysArray = Object.keys(this.completedTaskDictionary);
+		this.numberOfCompletedTask = this.completedTaskDictionaryKeysArray.length;
 		this.initializeTaskList();
+		this.initializeCompletedTaskList();
+		console.log(this.completedTaskDictionary);
+		
+		// localStorage.clear();
 	}
 
 	initializeTaskList() {
@@ -27,12 +34,32 @@ class Task {
 		}	
 	}
 
+	initializeCompletedTaskList() {
+		for (let i = 0; i < this.numberOfCompletedTask; i++) {
+			let taskId = this.completedTaskDictionaryKeysArray[i]
+			let taskContent = this.completedTaskDictionary[taskId]
+			this.displayCompletedTask(taskId, taskContent)
+			this.displayNumberCompletedNumberOfTasks();
+		}
+	}
+
 	getNumberOftasks() {
 		return this.numberOfTasks;
 	}
 
 	updateNumberOftasks() {
 		this.numberOfTasks += 1;
+	}
+
+	updateCompletedNumberOfTasks() {
+		this.numberOfCompletedTask += 1;
+		var completedTaskNumber = document.getElementById("completed-task-number");
+		completedTaskNumber.textContent = this.numberOfCompletedTask;
+	}
+
+	displayNumberCompletedNumberOfTasks() {
+		var completedTaskNumber = document.getElementById("completed-task-number");
+		completedTaskNumber.textContent = this.numberOfCompletedTask;
 	}
 
 	addTask(content) {
@@ -72,19 +99,76 @@ class Task {
 		task.appendChild(checkBox);
 		task.appendChild(checkmarkLabel).appendChild(checkMarkImage);
 		task.appendChild(taskDescription);
-		this.tasklist.appendChild(task);
+		this.taskList.appendChild(task);
 	}
 
-	// IMPLEMENT THIS
-	completeTask(targetElementId) {
+	// get the "content" to be added along with the task
+	displayCompletedTask(taskId, content) {
+		let currentTaskId = taskId
+		console.log(taskId);
+
+		const task = document.createElement("div");
+		task.classList.add("frame__task-list-item");
+
+		const checkBox = document.createElement("input");
+		checkBox.type = "checkbox";
+		checkBox.id = currentTaskId;
+		checkBox.classList.add("checkmark-checkbox");
+
+		const checkmarkLabel = document.createElement("label");
+		checkmarkLabel.htmlFor = currentTaskId;
+		checkmarkLabel.classList.add("checkmark-label");
+
+		const checkMarkImage = document.createElement("i");
+		checkMarkImage.classList.add("fas", "fa-check")
+
+		const taskDescription = document.createElement("span");
+		taskDescription.textContent = content;
+
+		task.appendChild(checkBox);
+		task.appendChild(checkmarkLabel).appendChild(checkMarkImage);
+		task.appendChild(taskDescription);
+		this.completedTaskList.appendChild(task);
+	}
+
+	//TEMPORARY
+	deleteTask() {
+		// Gets the parent node (div that contains the checkbox) then remove it from the page and update localStorage
+		this.taskDictionary = {};
+		localStorage.setItem("task-items", JSON.stringify(this.taskDictionary))
+		localStorage.setItem("completed-task-items", JSON.stringify(this.taskDictionary))
+	}
+
+	deleteCompletedTask(targetElementId) {
 		// Gets the parent node (div that contains the checkbox) then remove it from the page and update localStorage
 		const  parentNode = document.getElementById(targetElementId).parentElement
-		console.log(targetElementId)
 		delete this.taskDictionary[targetElementId];
-		console.log(this.taskDictionary);
-		localStorage.setItem("task-items", JSON.stringify(this.taskDictionary))
+		localStorage.setItem("completed-task-items", JSON.stringify(this.taskDictionary))
 		parentNode.remove();
 	}
+
+	// Need to add uncomplete button
+
+	completeTask(targetElementId) {
+		const parentNode = document.getElementById(targetElementId).parentElement;
+		const parentNodeClone = parentNode.cloneNode(true);
+
+		delete this.taskDictionary[targetElementId];
+		parentNode.remove();
+
+		this.completedTaskDictionary[`completed-${targetElementId}`] = parentNode.lastChild.textContent; // LastChild should be the span containing the content
+		document.getElementById("completed-task-list").appendChild(parentNodeClone);
+		
+		// Update localStorage
+		localStorage.setItem("completed-task-items", JSON.stringify(this.completedTaskDictionary));
+		localStorage.setItem("task-items", JSON.stringify(this.taskDictionary));
+		
+		// No need to call display since it is already displayed by appendChild above
+		this.updateCompletedNumberOfTasks();
+	}
+
+
+
 }
 
 // Initializing the Task class
@@ -97,6 +181,23 @@ var inputField = document.getElementById("task-text-input");
 addTaskButton.addEventListener("click", function() {
 	taskInstance.addTask(contentField.value);
 	inputField.value = "";
+});
+
+// add task button event listener
+const completedTaskButton = document.getElementById("completed-task-button");
+completedTaskButton.addEventListener("click", function() {
+	let taskList = document.getElementById("task-list");
+	let completedTaskList = document.getElementById("completed-task-list");
+
+	if (taskList.classList.contains("hidden")) {
+		taskList.classList.remove("hidden");
+		completedTaskList.classList.add("hidden");
+	}
+
+	else {
+		taskList.classList.add("hidden");
+		completedTaskList.classList.remove("hidden");
+	}
 });
 
 // Input Field "Enter" listener
@@ -117,6 +218,12 @@ document.addEventListener("change", function(event) {
 	}
 });
 
+
+//TEMPORARY
+const deleteBtn = document.getElementById("delete-button");
+deleteBtn.addEventListener("click", function() {
+	taskInstance.deleteTask();
+});
 
 
 
