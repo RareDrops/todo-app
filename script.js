@@ -1,27 +1,22 @@
 
 
-// Create a class that has these functionalities:
-// 4. Once the task has been completed, we move the completed task(check marked) to completed task list in localStorage
-// 5. If we want to undo(uncheck) the task that has been completed, we move the completed task from complete task list to task list
-// 6. If we want to delete a task from the completed/uncomplete task list, we can delete it from localStorage
-// NOTE: LocalStorage gets cleared when the browser is closed. For long term storage, we can use IndexedDB or WebSQL
-
-// Next task: Use Local Storage to store data
 
 class Task {
 	constructor() {
 		this.taskList = document.getElementById("task-list");
 		this.taskDictionary = localStorage.getItem('task-items') ? JSON.parse(localStorage.getItem('task-items')) : {};
 		this.taskDictionaryKeysArray = Object.keys(this.taskDictionary);
-		this.numberOfTasks = this.taskDictionaryKeysArray.length;
 
 		this.completedTaskList = document.getElementById("completed-task-list");
 		this.completedTaskDictionary = localStorage.getItem('completed-task-items') ? JSON.parse(localStorage.getItem('completed-task-items')) : {};
 		this.completedTaskDictionaryKeysArray = Object.keys(this.completedTaskDictionary);
+
+		this.numberOfTasks = this.taskDictionaryKeysArray.length;
 		this.numberOfCompletedTask = this.completedTaskDictionaryKeysArray.length;
+		this.totalNumberOfTasks = this.numberOfTasks + this.numberOfCompletedTask;
+		
 		this.initializeTaskList();
 		this.initializeCompletedTaskList();
-		console.log(this.completedTaskDictionary);
 		
 		// localStorage.clear();
 	}
@@ -49,6 +44,7 @@ class Task {
 
 	updateNumberOftasks() {
 		this.numberOfTasks += 1;
+		this.totalNumberOfTasks += 1;
 	}
 
 	updateCompletedNumberOfTasks() {
@@ -63,7 +59,7 @@ class Task {
 	}
 
 	addTask(content) {
-		let keyId = `task-${this.numberOfTasks+1}`
+		let keyId = `task-${this.totalNumberOfTasks+1}`
 		this.addItemToDictionary(keyId, content);
 		this.displayTask(keyId, content)
 		this.updateNumberOftasks();
@@ -105,13 +101,14 @@ class Task {
 	// get the "content" to be added along with the task
 	displayCompletedTask(taskId, content) {
 		let currentTaskId = taskId
-		console.log(taskId);
 
 		const task = document.createElement("div");
 		task.classList.add("frame__task-list-item");
 
 		const checkBox = document.createElement("input");
 		checkBox.type = "checkbox";
+		// displays on a checked state
+		checkBox.checked = true;
 		checkBox.id = currentTaskId;
 		checkBox.classList.add("checkmark-checkbox");
 
@@ -147,16 +144,20 @@ class Task {
 		parentNode.remove();
 	}
 
-	// Need to add uncomplete button
 
 	completeTask(targetElementId) {
 		const parentNode = document.getElementById(targetElementId).parentElement;
 		const parentNodeClone = parentNode.cloneNode(true);
 
+		const newtargetElementId = `completed-${targetElementId}`
+
+		parentNodeClone.childNodes[0].id = newtargetElementId
+		parentNodeClone.childNodes[1].htmlFor = newtargetElementId
+
 		delete this.taskDictionary[targetElementId];
 		parentNode.remove();
 
-		this.completedTaskDictionary[`completed-${targetElementId}`] = parentNode.lastChild.textContent; // LastChild should be the span containing the content
+		this.completedTaskDictionary[newtargetElementId] = parentNode.lastChild.textContent; // LastChild should be the span containing the content
 		document.getElementById("completed-task-list").appendChild(parentNodeClone);
 		
 		// Update localStorage
@@ -167,8 +168,30 @@ class Task {
 		this.updateCompletedNumberOfTasks();
 	}
 
+	unCompleteTask(targetElementId) {
+		const parentNode = document.getElementById(targetElementId).parentElement;
+		const parentNodeClone = parentNode.cloneNode(true);
 
+		delete this.completedTaskDictionary[targetElementId];
+		parentNode.remove();
 
+		const newTargetElementId = targetElementId.slice(10)
+
+		parentNodeClone.childNodes[0].id = newTargetElementId
+		parentNodeClone.childNodes[1].htmlFor = newTargetElementId
+		
+		this.taskDictionary[newTargetElementId] = parentNode.lastChild.textContent; // Slices "completed-" from the Id
+		
+		document.getElementById("task-list").appendChild(parentNodeClone);
+		
+		// Update localStorage
+		localStorage.setItem("completed-task-items", JSON.stringify(this.completedTaskDictionary));
+		localStorage.setItem("task-items", JSON.stringify(this.taskDictionary));
+		
+		// Decrease completed count and update the display
+		this.numberOfCompletedTask -= 1
+		this.displayNumberCompletedNumberOfTasks();
+	}
 }
 
 // Initializing the Task class
@@ -210,15 +233,23 @@ completedTaskButton.addEventListener("click", function() {
 });
 
 
+// Event handler function
+function handleCheckboxChange(event) {
+    if (event.target && event.target.classList.contains("checkmark-checkbox")) {
+        const targetElementId = event.target.id;
 
-const checkmarkLabels = document.getElementsByClassName("checkmark-checkbox");
-document.addEventListener("change", function(event) {
-	// Adds event listener for Checkboxes
-	if (event.target && event.target.classList.contains("checkmark-checkbox")) {
-		const targetElementId = event.target.id
-		taskInstance.completeTask(targetElementId);
-	}
-});
+        if (targetElementId.startsWith("complete")) {
+            taskInstance.unCompleteTask(targetElementId);
+        } else {
+            taskInstance.completeTask(targetElementId);
+        }
+    }
+}
+
+// Attach event listener to document
+function attachEventListeners() {
+    document.addEventListener("change", handleCheckboxChange);
+}
 
 
 //TEMPORARY
@@ -228,4 +259,6 @@ deleteBtn.addEventListener("click", function() {
 });
 
 
-
+document.addEventListener("DOMContentLoaded", function() {
+	attachEventListeners();
+});
