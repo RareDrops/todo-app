@@ -36,7 +36,7 @@ ul li {
   background-color: var(--primary-color);
   align-items: center;
   width: 570px;
-  min-height: 80%;
+  height: 90%;
   flex-direction: column;
   border: 3px solid black;
   border-radius: 15px;
@@ -80,7 +80,7 @@ ul li {
 }
 .frame__task-list {
   width: 90%;
-  height: 550px;
+  height: 100%;
   overflow-y: auto;
 }
 .frame__task-list-item {
@@ -174,4 +174,12 @@ ul li {
 }
 .completed-task-button:hover {
   color: black;
+}
+
+@media screen and (max-width: 710px) {
+  .frame {
+    width: 100vw;
+    height: 100vh;
+    margin-top: 0;
+  }
 }/*# sourceMappingURL=style.css.map */

@@ -39,7 +39,7 @@ ul {
 	background-color: var(--primary-color);
 	align-items: center;
 	width: 570px;
-	min-height: 80%;
+	height: 90%;
 	flex-direction: column;
 	border: 3px solid black;
 	border-radius: 15px;
@@ -85,7 +85,7 @@ ul {
 
 	&__task-list {
 		width: 90%;
-		height: 550px;
+		height: 100%;
 		overflow-y: auto;
 	}
 
@@ -148,4 +148,6 @@ $text-spans: (
 
 
 @import 'checkmark-block';
-@import '_completed-button-block.scss'
+@import '_completed-button-block.scss';
+
+@import '_media.scss';
