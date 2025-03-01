@@ -33,15 +33,12 @@ ul {
 }
 
 
-
-
 .frame {
-	margin-top: 5%;
+	margin-top: 3%;
 	display: flex;
 	background-color: var(--primary-color);
 	align-items: center;
 	width: 570px;
-	height: auto;
 	min-height: 80%;
 	flex-direction: column;
 	border: 3px solid black;
@@ -88,6 +85,8 @@ ul {
 
 	&__task-list {
 		width: 90%;
+		height: 550px;
+		overflow-y: auto;
 	}
 
 	&__task-list-item {
@@ -103,6 +102,7 @@ ul {
 		padding-bottom: 2px;
 		background-color: var(--task-list-grey-color);
 		border-radius: 5px;
+		
 
 		&:first-child {
 			margin-top: 0%;
@@ -110,7 +110,7 @@ ul {
 
 		&:last-child {
 			margin-bottom: 5%;
-		}
+		}	
 	}
 }
 
