@@ -31,12 +31,11 @@ ul li {
 }
 
 .frame {
-  margin-top: 5%;
+  margin-top: 3%;
   display: flex;
   background-color: var(--primary-color);
   align-items: center;
   width: 570px;
-  height: auto;
   min-height: 80%;
   flex-direction: column;
   border: 3px solid black;
@@ -81,6 +80,8 @@ ul li {
 }
 .frame__task-list {
   width: 90%;
+  height: 550px;
+  overflow-y: auto;
 }
 .frame__task-list-item {
   display: flex;
@@ -165,11 +166,10 @@ ul li {
 }
 
 .completed-task-button {
-  align-items: flex-end;
+  margin-bottom: 10%;
   font-family: var(--primary-font);
   background-color: var(--primary-color);
   border: none;
-  border-radius: 15%;
   cursor: pointer;
 }
 .completed-task-button:hover {
