@@ -1,9 +1,8 @@
 .completed-task-button {
-	align-items: flex-end;
+	margin-bottom: 10%;
 	font-family: var(--primary-font);
 	background-color: var(--primary-color);
 	border: none;
-	border-radius: 15%;
 	cursor: pointer;
 
 	&:hover {
