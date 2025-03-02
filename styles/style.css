@@ -96,6 +96,7 @@ ul li {
   padding-bottom: 2px;
   background-color: var(--task-list-grey-color);
   border-radius: 5px;
+  position: relative;
 }
 .frame__task-list-item:first-child {
   margin-top: 0%;
@@ -103,9 +104,8 @@ ul li {
 .frame__task-list-item:last-child {
   margin-bottom: 5%;
 }
-
-.flex-end {
-  justify-self: end;
+.frame__task-list-item:hover .focus-show-button {
+  display: block;
 }
 
 .hidden {
@@ -145,7 +145,7 @@ ul li {
   min-width: 25px;
   min-height: 25px;
   background-color: #fff;
-  border: none;
+  border: 1px solid black;
   border-radius: 10%;
   cursor: pointer;
   font-size: 1.5rem;
@@ -176,10 +176,30 @@ ul li {
   color: black;
 }
 
+.focus-show-button {
+  display: none;
+  position: absolute;
+  right: 1rem;
+}
+
+.edit-task-button,
+.delete-task-button {
+  border: 0;
+  padding: 5px 5px;
+  background-color: inherit;
+  cursor: pointer;
+}
+
+.edit-task-button:hover,
+.delete-task-button:hover {
+  color: rgba(255, 255, 255, 0.904);
+  background-color: #d9d9d9;
+}
+
 @media screen and (max-width: 710px) {
   .frame {
     width: 100vw;
-    height: 100vh;
+    height: 90vh;
     margin-top: 0;
   }
 }/*# sourceMappingURL=style.css.map */

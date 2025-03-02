@@ -102,7 +102,7 @@ ul {
 		padding-bottom: 2px;
 		background-color: var(--task-list-grey-color);
 		border-radius: 5px;
-		
+        position: relative; // Ensure this is positioned relative
 
 		&:first-child {
 			margin-top: 0%;
@@ -110,13 +110,14 @@ ul {
 
 		&:last-child {
 			margin-bottom: 5%;
-		}	
+		}
+
+		&:hover .focus-show-button {
+			display: block;
+		}
 	}
 }
 
-.flex-end {
-	justify-self: end;
-}
 
 .hidden {
 	display: none !important;
@@ -147,7 +148,7 @@ $text-spans: (
 }
 
 
-@import 'checkmark-block';
-@import '_completed-button-block.scss';
+@import '_checkmark-block';
+@import '_button-block';
 
-@import '_media.scss';
+@import '_media';
