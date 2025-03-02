@@ -76,6 +76,7 @@ class Task {
 
 		const task = document.createElement("div");
 		task.classList.add("frame__task-list-item");
+		task.draggable = true;
 
 		const checkBox = document.createElement("input");
 		checkBox.type = "checkbox";
@@ -87,13 +88,29 @@ class Task {
 		checkmarkLabel.classList.add("checkmark-label");
 
 		const checkMarkImage = document.createElement("i");
-		checkMarkImage.classList.add("fas", "fa-check")
+		checkMarkImage.classList.add("fas", "fa-check");
+
+		const focusableIconDiv = document.createElement("div");
+		focusableIconDiv.classList.add("focus-show-button");
+		const editButton = document.createElement("button");
+		editButton.type = "button";
+		editButton.id = `edit-button-${currentTaskId}`
+		editButton.classList.add("edit-task-button");
+		fetch('assets/svgs/editicon.svg').then(response => response.text()).then(data => {editButton.innerHTML = data;}).catch(error => console.error(error));
+		const deleteButton = document.createElement("button");
+		deleteButton.type = "button";
+		deleteButton.id = "edit-button-task-1";
+		deleteButton.classList.add("delete-task-button");
+		fetch('assets/svgs/trashicon.svg').then(response => response.text()).then(data => {deleteButton.innerHTML = data;}).catch(error => console.error(error));
 
 		const taskDescription = document.createElement("span");
 		taskDescription.textContent = content;
 
 		task.appendChild(checkBox);
 		task.appendChild(checkmarkLabel).appendChild(checkMarkImage);
+		focusableIconDiv.appendChild(editButton);
+		focusableIconDiv.appendChild(deleteButton);
+		task.appendChild(focusableIconDiv);
 		task.appendChild(taskDescription);
 		this.taskList.appendChild(task);
 	}
@@ -104,6 +121,7 @@ class Task {
 
 		const task = document.createElement("div");
 		task.classList.add("frame__task-list-item");
+		task.draggable = true;
 
 		const checkBox = document.createElement("input");
 		checkBox.type = "checkbox";
@@ -117,15 +135,32 @@ class Task {
 		checkmarkLabel.classList.add("checkmark-label");
 
 		const checkMarkImage = document.createElement("i");
-		checkMarkImage.classList.add("fas", "fa-check")
+		checkMarkImage.classList.add("fas", "fa-check");
+
+		// for the icons that would appear once you hover to the task-item div
+		const focusableIconDiv = document.createElement("div");
+		focusableIconDiv.classList.add("focus-show-button");
+		const editButton = document.createElement("button");
+		editButton.type = "button";
+		editButton.id = `edit-button-${currentTaskId}`
+		editButton.classList.add("edit-task-button");
+		fetch('assets/svgs/editicon.svg').then(response => response.text()).then(data => {editButton.innerHTML = data;}).catch(error => console.error(error));
+		const deleteButton = document.createElement("button");
+		deleteButton.type = "button";
+		deleteButton.id = "edit-button-task-1";
+		deleteButton.classList.add("delete-task-button");
+		fetch('assets/svgs/trashicon.svg').then(response => response.text()).then(data => {deleteButton.innerHTML = data;}).catch(error => console.error(error));
 
 		const taskDescription = document.createElement("span");
 		taskDescription.textContent = content;
 
 		task.appendChild(checkBox);
 		task.appendChild(checkmarkLabel).appendChild(checkMarkImage);
+		focusableIconDiv.appendChild(editButton);
+		focusableIconDiv.appendChild(deleteButton);
+		task.appendChild(focusableIconDiv);
 		task.appendChild(taskDescription);
-		this.completedTaskList.appendChild(task);
+		this.taskList.appendChild(task);
 	}
 
 	//TEMPORARY
