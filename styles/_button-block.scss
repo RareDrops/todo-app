@@ -1,0 +1,34 @@
+.completed-task-button {
+	margin-bottom: 10%;
+	font-family: var(--primary-font);
+	background-color: var(--primary-color);
+	border: none;
+	cursor: pointer;
+
+	&:hover {
+		color: black;
+	}
+}
+
+// hover will show the button in style.scss inside .frame class
+.focus-show-button {
+    display: none;
+	position: absolute;
+	right: 1rem;
+}
+
+.edit-task-button,
+.delete-task-button {
+	border: 0;
+	padding: 5px 5px;
+	background-color: inherit;
+	cursor: pointer;
+}
+
+.edit-task-button:hover,
+.delete-task-button:hover {
+	color: rgba(255, 255, 255, 0.904);
+	background-color: #d9d9d9;
+}
+
+
