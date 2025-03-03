@@ -32,6 +32,10 @@ ul {
 	}
 }
 
+// Prevents SVG and all elements inside SVG to be interactable
+svg, svg * {
+	pointer-events: none !important;
+}
 
 .frame {
 	margin-top: 3%;

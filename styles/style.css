@@ -30,6 +30,10 @@ ul li {
   list-style-type: none;
 }
 
+svg, svg * {
+  pointer-events: none !important;
+}
+
 .frame {
   margin-top: 3%;
   display: flex;
