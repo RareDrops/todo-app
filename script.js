@@ -1,3 +1,10 @@
+// TO IMPLEMENT: FIX ID SYSTEM, BROKEN WHEN DELETING TASKS
+// TO IMPLEMENT: EDIT FUNCTION ON THE SIDE
+// TO IMPLEMENT: DELETE ALL COMPLETED TASKS FUNCTION
+// TO IMPLEMENT: DELETE ALL TASKS FUNCTION
+// MORE FEATURES TO IMPLEMENT
+// TO IMPLEMENT: DRAGGABLE DIVS
+
 /**
  * HelperFunction class containing utility methods.
  */
@@ -83,19 +90,29 @@ class Task {
 	/**
 	 * Increments and update the Number Of Task and Total Task
 	 */
-	updateNumberOftasks() {
+	incrementNumberOfTasks() {
 		this.numberOfTasks += 1;
 		this.totalNumberOfTasks += 1;
 	}
 
-	/**
-	 * Increments the number of Completed Task and also update the display of the number of completed task at the bottom of the frame
-	 */
-	updateCompletedNumberOfTasks() {
-		this.numberOfCompletedTask += 1;
-		var completedTaskNumber = document.getElementById("completed-task-number");
-		completedTaskNumber.textContent = this.numberOfCompletedTask;
+	decrementNumberOfTasks() {
+		this.numberOfTasks -= 1;
+		this.totalNumberOfTasks -=1;
 	}
+
+	/**
+	 * Increments/Decrements the number of Completed Task and also update the display of the number of completed task at the bottom of the frame
+	 */
+	incrementNumberOfCompletedTasks() {
+		this.numberOfCompletedTask += 1;
+		this.displayNumberCompletedNumberOfTasks();
+	}
+
+	decrementNumberOfCompletedTasks() {
+		this.numberOfCompletedTask -= 1;
+		this.displayNumberCompletedNumberOfTasks();
+	}
+
 
 	/**
 	 * Do not increment the number of Completed Task but display the completed number of task at the bottom of the frame
@@ -113,7 +130,7 @@ class Task {
 		let keyId = `task-${this.totalNumberOfTasks+1}`
 		this.addItemToDictionary(keyId, content);
 		this.displayTask(keyId, content)
-		this.updateNumberOftasks();
+		this.incrementNumberOfTasks();
 	}
 
 	/**
@@ -262,6 +279,7 @@ class Task {
 		delete this.taskDictionary[parentDivNodeId]
 		parentDivNode.remove()
 		localStorage.setItem("task-items", JSON.stringify(this.taskDictionary))
+		this.decrementNumberOfTasks();
 	}
 
 	/**
@@ -276,6 +294,7 @@ class Task {
 		delete this.completedTaskDictionary[parentDivNodeId]
 		parentDivNode.remove()
 		localStorage.setItem("task-items", JSON.stringify(this.completedTaskDictionary))
+		this.decrementNumberOfCompletedTasks();
 	}
 
 
@@ -312,7 +331,7 @@ class Task {
 		localStorage.setItem("task-items", JSON.stringify(this.taskDictionary));
 		
 		// No need to call display since it is already displayed by appendChild above
-		this.updateCompletedNumberOfTasks();
+		this.incrementNumberOfCompletedTasks();
 	}
 
 	/**
@@ -400,6 +419,7 @@ function handleCheckboxChange(event) {
     if (event.target && event.target.classList.contains("checkmark-checkbox")) {
         const targetElementId = event.target.id;
         if (event.target.parentNode.classList.contains("complete")) {
+			console.log("huh")
             taskInstance.unCompleteTask(targetElementId);
         } else {
             taskInstance.completeTask(targetElementId);
@@ -409,7 +429,8 @@ function handleCheckboxChange(event) {
 
 function handleDeleteButtons(event) {
 	const targetButtonId = event.target.id
-	if (event.target.parentNode.classList.contains("complete")) {
+	const taskListItemDivNode = event.target.parentNode.parentNode // Button -> focusableDiv -> tasklist-item hence parentNode.parentNode
+	if (taskListItemDivNode.classList.contains("complete")) {
 		taskInstance.deleteCompletedTask(targetButtonId);
 	}
 	else {
