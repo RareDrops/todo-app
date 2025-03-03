@@ -8,15 +8,6 @@ class HelperFunctions {
 	 * @param {string} filename 
 	 * @returns {string} The SVG data representing the SVG
 	 */
-	// static fetchSvgIcon(filename) {
-	// 	let svgData;
-	// 	fetch(`assets/svgs/${filename}`)
-	// 	.then(response => response.text())
-	// 	.then(data => svgData = data)
-	// 	.catch(error => console.error(error))
-	// 	return svgData
-	// }
-	
 	static async fetchSvgIcon(filename) {
 		try {
 		  const response = await fetch(`assets/svgs/${filename}`);
@@ -56,8 +47,6 @@ class Task {
 		
 		this.initializeTaskList();
 		this.initializeCompletedTaskList();
-		
-		// localStorage.clear();
 	}
 	
 	/**
@@ -173,17 +162,14 @@ class Task {
 		editButton.type = "button";
 		editButton.id = editButtonId
 		editButton.classList.add("edit-task-button");
-		HelperFunctions.fetchSvgIcon('editicon.svg').then(
-			(SvgIcon) => 
-			editButton.innerHTML = SvgIcon)
+		fetch('assets/svgs/editicon.svg').then(response => response.text()).then(data => {editButton.innerHTML = data;}).catch(error => console.error(error));
 		// configure delete button inside focusableIconDiv
 		const deleteButton = document.createElement("button");
 		deleteButton.type = "button";
 		deleteButton.id = deleteButtonId;
 		deleteButton.classList.add("delete-task-button");
-		HelperFunctions.fetchSvgIcon('trashicon.svg').then(
-			(SvgIcon) => 
-			deleteButton.innerHTML = SvgIcon)
+		fetch('assets/svgs/trashicon.svg').then(response => response.text()).then(data => {deleteButton.innerHTML = data;}).catch(error => console.error(error));
+		deleteButton.addEventListener('click', handleDeleteButtons);
 		// set the task description from the input box
 		const taskDescription = document.createElement("span");
 		taskDescription.textContent = content;
@@ -207,13 +193,13 @@ class Task {
 	displayCompletedTask(taskId, content) {
 		// Initialize IDs
 		let currentTaskId = taskId;
-		let checkboxId = `completed-checkbox-${currentTaskId}`;
+		let checkboxId = `checkbox-${currentTaskId}`;
 		let editButtonId = `edit-button-${currentTaskId}`;
 		let deleteButtonId = `delete-button-${currentTaskId}`
 		// configure task-list-item div
 		const task = document.createElement("div");
 		task.id = currentTaskId;
-		task.classList.add("frame__task-list-item");
+		task.classList.add("frame__task-list-item", "complete");
 		task.draggable = true;
 		// configure checkbox input box
 		const checkbox = document.createElement("input");
@@ -244,6 +230,7 @@ class Task {
 		deleteButton.id = deleteButtonId;
 		deleteButton.classList.add("delete-task-button");
 		fetch('assets/svgs/trashicon.svg').then(response => response.text()).then(data => {deleteButton.innerHTML = data;}).catch(error => console.error(error));
+		deleteButton.addEventListener('click', handleDeleteButtons);
 		// set the task description from the input box
 		const taskDescription = document.createElement("span");
 		taskDescription.textContent = content;
@@ -256,7 +243,7 @@ class Task {
 		task.appendChild(focusableIconDiv);
 		task.appendChild(taskDescription);
 		// Finally, append the newly created task-item to the task-list
-		this.taskList.appendChild(task);
+		this.completedTaskList.appendChild(task);
 	}
 
 	//TEMPORARY
@@ -267,24 +254,29 @@ class Task {
 		localStorage.setItem("completed-task-items", JSON.stringify(this.taskDictionary))
 	}
 
-	// deleteTask(targetElementId) {
-	// 	const parentNode  = document.getElementById(targetElementId).parentElement.parentElement
-	// 	this.taskDictionary = {};
-	// 	localStorage.setItem("task-items", JSON.stringify(this.taskDictionary))
-	// 	localStorage.setItem("completed-task-items", JSON.stringify(this.taskDictionary))
-	// }
+	deleteTask(targetElementId) {
+		const parentDivNode  = document.getElementById(targetElementId).parentNode.parentNode // delete-button -> focusable-div -> task-list-item so parentNode.parentNode
+		const parentDivNodeId = parentDivNode.id;
+		
+		// Delete from the dictionary and localStorage
+		delete this.taskDictionary[parentDivNodeId]
+		parentDivNode.remove()
+		localStorage.setItem("task-items", JSON.stringify(this.taskDictionary))
+	}
 
-	// /**
-	//  * Deletes the completed task
-	//  * @param {string} targetElementId the ID of the completed task element that is to be deleted 
-	//  */
-	// deleteCompletedTask(targetElementId) {
-	// 	// Gets the parent node (div that contains the checkbox) then remove it from the page and update localStorage
-	// 	const  parentNode = document.getElementById(targetElementId).parentElement
-	// 	delete this.taskDictionary[targetElementId];
-	// 	localStorage.setItem("completed-task-items", JSON.stringify(this.taskDictionary))
-	// 	parentNode.remove();
-	// }
+	/**
+	 * Deletes the completed task
+	 * @param {string} targetElementId the ID of the completed task element that is to be deleted 
+	 */
+	deleteCompletedTask(targetElementId) {
+		const parentDivNode  = document.getElementById(targetElementId).parentNode.parentNode // delete-button -> focusable-div -> task-list-item so parentNode.parentNode
+		const parentDivNodeId = parentDivNode.id;
+		
+		// Delete from the dictionary and localStorage
+		delete this.completedTaskDictionary[parentDivNodeId]
+		parentDivNode.remove()
+		localStorage.setItem("task-items", JSON.stringify(this.completedTaskDictionary))
+	}
 
 
 	/**
@@ -295,21 +287,24 @@ class Task {
 	 * Adds the text content of the - to be deleted element - to the completedTaskDictionary with the newly generated Id
 	 * Removes the parentNode, and append the cloned parentNode to the completed-task-list div, this displays the completed task from task-list div to the completed-task-list div
 	 * Sets the localStorage to store the changes, then update the completed number of tasks and its display
-	 * @param {string} targetElementId the ID of the task element to be completed
+	 * @param {string} targetElementId the ID of the checkbox to be completed
 	 */
 	completeTask(targetElementId) {
 		const parentNode = document.getElementById(targetElementId).parentElement;
 		const parentNodeClone = parentNode.cloneNode(true);
+		parentNodeClone.classList.add("complete")
 
-		const newtargetElementId = `completed-checkbox-${targetElementId}`
+		const checkboxId = targetElementId;
+		const parentNodeId = parentNode.id
 
-		parentNodeClone.childNodes[0].id = newtargetElementId
-		parentNodeClone.childNodes[1].htmlFor = newtargetElementId
+		// checkbox/label respectively
+		parentNodeClone.childNodes[0].id = checkboxId
+		parentNodeClone.childNodes[1].htmlFor = checkboxId
 
-		delete this.taskDictionary[targetElementId];
+		delete this.taskDictionary[parentNodeId];
 		parentNode.remove();
 
-		this.completedTaskDictionary[newtargetElementId] = parentNode.lastChild.textContent; // LastChild should be the span containing the content
+		this.completedTaskDictionary[parentNodeId] = parentNode.lastChild.textContent; // LastChild should be the span containing the content
 		document.getElementById("completed-task-list").appendChild(parentNodeClone);
 		
 		// Update localStorage
@@ -333,16 +328,19 @@ class Task {
 	unCompleteTask(targetElementId) {
 		const parentNode = document.getElementById(targetElementId).parentElement;
 		const parentNodeClone = parentNode.cloneNode(true);
+		parentNodeClone.classList.remove("complete")
 
-		delete this.completedTaskDictionary[targetElementId];
+		const checkboxId = targetElementId;
+		const parentNodeId = parentNode.id;
+
+		// checkbox/label respectively
+		parentNodeClone.childNodes[0].id = checkboxId
+		parentNodeClone.childNodes[1].htmlFor = checkboxId
+
+		delete this.completedTaskDictionary[parentNodeId];
 		parentNode.remove();
-
-		const newTargetElementId = targetElementId.slice(10)
-
-		parentNodeClone.childNodes[0].id = newTargetElementId
-		parentNodeClone.childNodes[1].htmlFor = newTargetElementId
 		
-		this.taskDictionary[newTargetElementId] = parentNode.lastChild.textContent; // Slices "completed-" from the Id
+		this.taskDictionary[parentNodeId] = parentNode.lastChild.textContent; // Slices "completed-" from the Id
 		
 		document.getElementById("task-list").appendChild(parentNodeClone);
 		
@@ -401,8 +399,7 @@ completedTaskButton.addEventListener("click", function() {
 function handleCheckboxChange(event) {
     if (event.target && event.target.classList.contains("checkmark-checkbox")) {
         const targetElementId = event.target.id;
-		console.log(targetElementId);
-        if (targetElementId.startsWith("complete")) {
+        if (event.target.parentNode.classList.contains("complete")) {
             taskInstance.unCompleteTask(targetElementId);
         } else {
             taskInstance.completeTask(targetElementId);
@@ -410,9 +407,25 @@ function handleCheckboxChange(event) {
     }
 }
 
+function handleDeleteButtons(event) {
+	const targetButtonId = event.target.id
+	if (event.target.parentNode.classList.contains("complete")) {
+		taskInstance.deleteCompletedTask(targetButtonId);
+	}
+	else {
+		taskInstance.deleteTask(targetButtonId);
+	}
+}
+
 // Attach event listener to document
 function attachEventListeners() {
+	// For checkboxes
     document.addEventListener("change", handleCheckboxChange);
+
+	// For all delete buttons
+	const buttons = document.querySelectorAll('.delete-task-button');
+	buttons.forEach(button => {button.addEventListener('click', handleDeleteButtons)});
+
 }
 
 
@@ -422,12 +435,7 @@ deleteBtn.addEventListener("click", function() {
 	taskInstance.deleteAllTask();
 });
 
-// function handleDeleteButtons(event) {
-// 	if (event.target && event.target.classList.contains("delete-task-button")) {
-// 		const  targetElementId = event.target.id;
 
-// 	}
-// }
 
 
 document.addEventListener("DOMContentLoaded", function() {
