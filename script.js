@@ -1,9 +1,10 @@
-// TO IMPLEMENT: FIX ID SYSTEM, BROKEN WHEN DELETING TASKS
+// DONE: FIX ID SYSTEM, BROKEN WHEN DELETING TASKS
 // TO IMPLEMENT: EDIT FUNCTION ON THE SIDE
 // TO IMPLEMENT: DELETE ALL COMPLETED TASKS FUNCTION
 // TO IMPLEMENT: DELETE ALL TASKS FUNCTION
 // MORE FEATURES TO IMPLEMENT
 // TO IMPLEMENT: DRAGGABLE DIVS
+// TO IMPLEMENT: Animations..
 
 /**
  * HelperFunction class containing utility methods.
@@ -48,9 +49,10 @@ class Task {
 		this.completedTaskDictionary = localStorage.getItem('completed-task-items') ? JSON.parse(localStorage.getItem('completed-task-items')) : {};
 		this.completedTaskDictionaryKeysArray = Object.keys(this.completedTaskDictionary);
 
-		this.numberOfTasks = this.taskDictionaryKeysArray.length;
+		this.currentNumberOfTasks = this.taskDictionaryKeysArray.length;
 		this.numberOfCompletedTask = this.completedTaskDictionaryKeysArray.length;
-		this.totalNumberOfTasks = this.numberOfTasks + this.numberOfCompletedTask;
+		this.historicNumberOfTasks = parseInt(localStorage.getItem('historic-number-of-tasks') ? localStorage.getItem('historic-number-of-tasks') : 0); // For ID purposes
+		console.log(this.completedTaskDictionary)
 		
 		this.initializeTaskList();
 		this.initializeCompletedTaskList();
@@ -60,7 +62,7 @@ class Task {
 	 * Initializes the display of current task(s)
 	 */
 	initializeTaskList() {
-		for (let i = 0; i < this.numberOfTasks; i++) {
+		for (let i = 0; i < this.currentNumberOfTasks; i++) {
 			let taskId = this.taskDictionaryKeysArray[i]
 			let taskContent = this.taskDictionary[taskId]
 			this.displayTask(taskId, taskContent)
@@ -83,21 +85,22 @@ class Task {
 	 * 
 	 * @returns {int} The number of Current Task
 	 */
-	getNumberOftasks() {
-		return this.numberOfTasks;
+	getCurrentNumberOftasks() {
+		return this.currentNumberOfTasks;
 	}
 
 	/**
-	 * Increments and update the Number Of Task and Total Task
+	 * Increments and update the current number Of Task and total task(ID purposes)
 	 */
 	incrementNumberOfTasks() {
-		this.numberOfTasks += 1;
-		this.totalNumberOfTasks += 1;
+		this.currentNumberOfTasks += 1;
+		this.historicNumberOfTasks += 1;
+		localStorage.setItem('historic-number-of-tasks', String(this.historicNumberOfTasks))
+		console.log(this.historicNumberOfTasks)	; // check first if the historic number is being stored between sessions
 	}
 
 	decrementNumberOfTasks() {
-		this.numberOfTasks -= 1;
-		this.totalNumberOfTasks -=1;
+		this.currentNumberOfTasks -= 1;
 	}
 
 	/**
@@ -127,7 +130,7 @@ class Task {
 	 * @param {string} content The description of the task
 	 */
 	addTask(content) {
-		let keyId = `task-${this.totalNumberOfTasks+1}`
+		let keyId = `task-${this.historicNumberOfTasks+1}`
 		this.addItemToDictionary(keyId, content);
 		this.displayTask(keyId, content)
 		this.incrementNumberOfTasks();
@@ -204,6 +207,7 @@ class Task {
 
 	/**
 	 * Main component of creating and appending the elements to be displayed in the task-list div in the website, appends the task-list-item div to the task-list div
+	 * NOTE: Only used for initialization
 	 * @param {string} taskId Unique ID to be used for the dictionary 
 	 * @param {string} content The description of the task
 	 */
@@ -269,6 +273,7 @@ class Task {
 		this.taskDictionary = {};
 		localStorage.setItem("task-items", JSON.stringify(this.taskDictionary))
 		localStorage.setItem("completed-task-items", JSON.stringify(this.taskDictionary))
+		localStorage.setItem("historic-number-of-tasks", "0"); // localStorage can only accept String, but will be convert to int later with parseInt
 	}
 
 	deleteTask(targetElementId) {
@@ -279,7 +284,6 @@ class Task {
 		delete this.taskDictionary[parentDivNodeId]
 		parentDivNode.remove()
 		localStorage.setItem("task-items", JSON.stringify(this.taskDictionary))
-		this.decrementNumberOfTasks();
 	}
 
 	/**
@@ -293,7 +297,7 @@ class Task {
 		// Delete from the dictionary and localStorage
 		delete this.completedTaskDictionary[parentDivNodeId]
 		parentDivNode.remove()
-		localStorage.setItem("task-items", JSON.stringify(this.completedTaskDictionary))
+		localStorage.setItem("completed-task-items", JSON.stringify(this.completedTaskDictionary))
 		this.decrementNumberOfCompletedTasks();
 	}
 
@@ -316,9 +320,11 @@ class Task {
 		const checkboxId = targetElementId;
 		const parentNodeId = parentNode.id
 
-		// checkbox/label respectively
+		// checkbox/label respectively 
+		// also attaches eventlisteners
 		parentNodeClone.childNodes[0].id = checkboxId
 		parentNodeClone.childNodes[1].htmlFor = checkboxId
+		parentNodeClone.querySelector(`#delete-button-${parentNodeId}`).addEventListener("click", handleDeleteButtons)
 
 		delete this.taskDictionary[parentNodeId];
 		parentNode.remove();
@@ -353,8 +359,10 @@ class Task {
 		const parentNodeId = parentNode.id;
 
 		// checkbox/label respectively
+		// also attaches eventlisteners
 		parentNodeClone.childNodes[0].id = checkboxId
 		parentNodeClone.childNodes[1].htmlFor = checkboxId
+		parentNodeClone.querySelector(`#delete-button-${parentNodeId}`).addEventListener("click", handleDeleteButtons)
 
 		delete this.completedTaskDictionary[parentNodeId];
 		parentNode.remove();
@@ -419,7 +427,6 @@ function handleCheckboxChange(event) {
     if (event.target && event.target.classList.contains("checkmark-checkbox")) {
         const targetElementId = event.target.id;
         if (event.target.parentNode.classList.contains("complete")) {
-			console.log("huh")
             taskInstance.unCompleteTask(targetElementId);
         } else {
             taskInstance.completeTask(targetElementId);
