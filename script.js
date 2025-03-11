@@ -470,10 +470,10 @@ function attachEventListeners() {
 
 
 //TEMPORARY
-const deleteBtn = document.getElementById("delete-button");
-deleteBtn.addEventListener("click", function() {
-	taskInstance.deleteAllTask();
-});
+// const deleteBtn = document.getElementById("delete-button");
+// deleteBtn.addEventListener("click", function() {
+// 	taskInstance.deleteAllTask();
+// });
 
 
 
