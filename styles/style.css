@@ -206,4 +206,51 @@ svg, svg * {
     height: 90vh;
     margin-top: 0;
   }
+}
+/* Semi-circle container */
+.semi-circle {
+  position: relative;
+  width: 100px;
+  height: 50px;
+  background-color: #4CAF50; /* Semi-circle color */
+  border-radius: 100px 100px 0 0; /* Creates a semi-circle */
+  cursor: pointer;
+  transition: all 0.3s ease-in-out; /* Smooth transition for hover */
+  overflow: hidden; /* Hide the hidden content (box) initially */
+}
+
+/* Box that expands on hover */
+.box {
+  position: absolute;
+  top: 0;
+  left: 100px; /* Starts off-screen to the right */
+  width: 0;
+  height: 100%; /* Matches the height of the semi-circle */
+  background-color: rgba(0, 0, 0, 0.8); /* Box color */
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  color: white;
+  padding: 10px 0;
+  overflow: hidden;
+  transition: all 0.3s ease; /* Smooth expansion */
+}
+
+/* Links inside the box */
+.box a {
+  color: white;
+  text-decoration: none;
+  margin: 5px 10px;
+  font-size: 14px;
+  opacity: 0; /* Hide options initially */
+  transition: opacity 0.3s ease;
+}
+
+/* Hover effect on the semi-circle */
+.semi-circle:hover .box {
+  width: 150px; /* Expands to a box width */
+}
+
+.semi-circle:hover .box a {
+  opacity: 1; /* Reveals the options when expanded */
 }/*# sourceMappingURL=style.css.map */
