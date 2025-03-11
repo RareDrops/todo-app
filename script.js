@@ -1,10 +1,10 @@
 // DONE: FIX ID SYSTEM, BROKEN WHEN DELETING TASKS
-// TO IMPLEMENT: EDIT FUNCTION ON THE SIDE
 // TO IMPLEMENT: DELETE ALL COMPLETED TASKS FUNCTION
 // TO IMPLEMENT: DELETE ALL TASKS FUNCTION
-// MORE FEATURES TO IMPLEMENT
+// MORE FEATURES TO IMPLEMENT...
 // TO IMPLEMENT: DRAGGABLE DIVS
 // TO IMPLEMENT: Animations..
+// TO IMPLEMENT: EDIT FUNCTION ON THE SIDE
 
 /**
  * HelperFunction class containing utility methods.
@@ -178,11 +178,11 @@ class Task {
 		const focusableIconDiv = document.createElement("div");
 		focusableIconDiv.classList.add("focus-show-button");
 		// configure edit button inside focusableIconDiv
-		const editButton = document.createElement("button");
-		editButton.type = "button";
-		editButton.id = editButtonId
-		editButton.classList.add("edit-task-button");
-		fetch('assets/svgs/editicon.svg').then(response => response.text()).then(data => {editButton.innerHTML = data;}).catch(error => console.error(error));
+		// const editButton = document.createElement("button");
+		// editButton.type = "button";
+		// editButton.id = editButtonId
+		// editButton.classList.add("edit-task-button");
+		// fetch('assets/svgs/editicon.svg').then(response => response.text()).then(data => {editButton.innerHTML = data;}).catch(error => console.error(error));
 		// configure delete button inside focusableIconDiv
 		const deleteButton = document.createElement("button");
 		deleteButton.type = "button";
@@ -197,7 +197,7 @@ class Task {
 		// join/nest the elements together
 		task.appendChild(checkbox);
 		task.appendChild(checkmarkLabel).appendChild(checkMarkImage);
-		focusableIconDiv.appendChild(editButton);
+		// focusableIconDiv.appendChild(editButton);
 		focusableIconDiv.appendChild(deleteButton);
 		task.appendChild(focusableIconDiv);
 		task.appendChild(taskDescription);
@@ -381,6 +381,9 @@ class Task {
 	}
 }
 
+// helper functions
+
+
 // Initializing the Task class
 const taskInstance = new Task();
 
@@ -405,20 +408,29 @@ inputField.addEventListener("keydown", function(event) {
 });
 
 // add task button event listener
-const completedTaskButton = document.getElementById("completed-task-button");
-completedTaskButton.addEventListener("click", function() {
-	let taskList = document.getElementById("task-list");
-	let completedTaskList = document.getElementById("completed-task-list");
 
-	if (taskList.classList.contains("hidden")) {
-		taskList.classList.remove("hidden");
-		completedTaskList.classList.add("hidden");
-	}
+const completedTaskButtons = document.querySelectorAll(".completed-task-button");
+completedTaskButtons.forEach((completedTaskButton) => {
+	completedTaskButton.addEventListener("click", function() {
+		let taskList = document.getElementById("task-list");
+		let completedTaskList = document.getElementById("completed-task-list");
 
-	else {
-		taskList.classList.add("hidden");
-		completedTaskList.classList.remove("hidden");
-	}
+		if (taskList.classList.contains("hidden")) {
+			taskList.classList.remove("hidden");
+			completedTaskList.classList.add("hidden");
+			document.querySelector(".frame__task-list-header").innerHTML = "Task List";
+			document.getElementById("completed-task-button").classList.remove("hidden");
+			document.getElementById("hide-completed-task-button").classList.add("hidden");
+		}
+
+		else {
+			taskList.classList.add("hidden");
+			completedTaskList.classList.remove("hidden");
+			document.querySelector(".frame__task-list-header").innerHTML = "Completed Tasks";
+			document.getElementById("completed-task-button").classList.add("hidden");
+			document.getElementById("hide-completed-task-button").classList.remove("hidden");
+		}
+	});
 });
 
 
