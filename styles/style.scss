@@ -11,7 +11,7 @@ html {
 	--primary-color: #F5F3ED;
 	--yellow-button-color: #FFF18B;
 	--task-list-grey-color: #D9D9D9;
-
+	--light-grey-color-1: #9c9c9c;
 }
 
 body {
@@ -32,15 +32,18 @@ ul {
 	}
 }
 
+// Prevents SVG and all elements inside SVG to be interactable
+svg, svg * {
+	pointer-events: none !important;
+}
 
 .frame {
-	margin-top: 5%;
+	margin-top: 3%;
 	display: flex;
 	background-color: var(--primary-color);
 	align-items: center;
-	width: 30%;
-	height: auto;
-	min-height: 80%;
+	width: 570px;
+	height: 90%;
 	flex-direction: column;
 	border: 3px solid black;
 	border-radius: 15px;
@@ -58,7 +61,7 @@ ul {
 
 		&-field {
 			font-family: var(--primary-font);
-			width: 70%;
+			width: 74%;
 			height: 3.5rem;
 			border-radius: 5px;
 			border: 1px;
@@ -85,7 +88,9 @@ ul {
 	}
 
 	&__task-list {
-		width: 85%;
+		width: 90%;
+		height: 100%;
+		overflow-y: auto;
 	}
 
 	&__task-list-item {
@@ -101,6 +106,7 @@ ul {
 		padding-bottom: 2px;
 		background-color: var(--task-list-grey-color);
 		border-radius: 5px;
+        position: relative; // Ensure this is positioned relative
 
 		&:first-child {
 			margin-top: 0%;
@@ -109,15 +115,23 @@ ul {
 		&:last-child {
 			margin-bottom: 5%;
 		}
+
+		&:hover .focus-show-button {
+			display: block;
+		}
 	}
 }
 
 
+.hidden {
+	display: none !important;
+}
 
 
 // Define a map for the predefined properties
 $text-spans: (
   "text-span-1": (font-size: 1.5rem, line-height: 4.5rem, font-weight: 600),
+  "text-span-2": (font-size: 0.9rem, color: var(--light-grey-color-1))
 );
 
 .font-weight-normal {
@@ -138,4 +152,8 @@ $text-spans: (
 }
 
 
-@import 'checkmark-block';
+@import '_checkmark-block';
+@import '_button-block';
+
+@import '_media';
+@import '_more-options-block';

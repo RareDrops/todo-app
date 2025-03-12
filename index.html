@@ -24,8 +24,19 @@
 			
 			<div class = "frame__task-list-header text-span-1 font-weight-normal">
 				Task List
+			</div>		  
+
+			<div id="task-list" class="frame__task-list"></div>
+
+			<div id="completed-task-list" class="frame__task-list hidden"></div>
+
+			<div class="completed-task-div">
+				<button id="completed-task-button" class="completed-task-button text-span-2"><i class="fa-regular fa-flag"></i> Show <span id="completed-task-number">0</span> completed task(s) </button>
+				<button id="hide-completed-task-button" class="completed-task-button text-span-2 hidden"><i class="fa-regular fa-flag"></i> Hide completed task(s) </button>
 			</div>
-			<div id="taskList" class="frame__task-list"></div>
+			<!-- <div>
+				<button id="delete-button" class="delete-button text-span-2" style="">Delete</button>
+			</div> -->
 		</div>
 	</section>
 
